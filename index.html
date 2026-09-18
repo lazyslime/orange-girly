@@ -283,6 +283,9 @@
   /* jukebox */
   .obj-jukebox{ bottom:6%; left:8%; width:15%; }
 
+  /* chair with teddy bear */
+  .obj-chair{ bottom:6%; left:27%; width:15%; }
+
   /* treasure chest */
   .obj-claw{ bottom:8%; right:8%; width:23%; }
 
@@ -856,6 +859,75 @@
   }
   .shelf-empty{ font-size:0.8rem; color:var(--cocoa); }
 
+  /* ----- bear letter modal ----- */
+  .bear-letter-scene{
+    position:relative;
+    min-height:300px;
+    display:flex;
+    justify-content:center;
+    padding-top:10px;
+  }
+  .envelope{
+    position:relative;
+    width:200px;
+    height:130px;
+    margin-top:34px;
+    cursor:pointer;
+    perspective:600px;
+  }
+  .envelope-body{
+    position:absolute;
+    inset:0;
+    background: var(--blush-soft);
+    border:2px solid var(--rose);
+    border-radius:6px;
+    z-index:1;
+  }
+  .envelope-flap{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:65px;
+    background: var(--rose);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform 0.6s ease;
+    z-index:3;
+  }
+  .envelope.open .envelope-flap{ transform: rotateX(150deg); }
+  .envelope-hint{
+    position:absolute;
+    bottom:-24px; left:0; right:0;
+    text-align:center;
+    font-size:0.75rem;
+    color: var(--cocoa);
+  }
+  .letter-paper{
+    position:absolute;
+    top:24px; left:50%;
+    width:220px;
+    max-height:0;
+    overflow:hidden;
+    transform: translateX(-50%) translateY(6px);
+    background: var(--cream);
+    border-radius:8px;
+    box-shadow: 0 16px 34px rgba(0,0,0,0.32);
+    padding:0 18px;
+    opacity:0;
+    transition: max-height 0.6s ease 0.3s, opacity 0.4s ease 0.3s, padding 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    font-size:0.85rem;
+    line-height:1.65;
+    color: var(--cocoa-dark);
+    white-space:pre-line;
+    z-index:5;
+  }
+  .letter-paper.show{
+    max-height:320px;
+    overflow-y:auto;
+    opacity:1;
+    padding:20px 18px;
+    transform: translateX(-50%) translateY(-46px);
+  }
+
   @media (max-width:560px){
     .shelf{ justify-content:center; }
   }
@@ -1009,6 +1081,39 @@
           <circle cx="65" cy="120" r="4.5" fill="#F4C669"/>
         </svg>
         <span class="label-chip">Play a song 🎶</span>
+      </button>
+
+      <!-- chair with teddy bear -->
+      <button class="hotspot obj-chair" onclick="openBearLetter()">
+        <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+          <rect x="25" y="110" width="5" height="35" rx="2" fill="#8A6A57"/>
+          <rect x="70" y="110" width="5" height="35" rx="2" fill="#8A6A57"/>
+          <rect x="20" y="55" width="60" height="55" rx="8" fill="#6B4A3F"/>
+          <rect x="30" y="63" width="12" height="40" rx="3" fill="#8A6A57"/>
+          <rect x="58" y="63" width="12" height="40" rx="3" fill="#8A6A57"/>
+          <rect x="15" y="105" width="70" height="12" rx="4" fill="#8A6A57"/>
+          <rect x="18" y="115" width="6" height="32" rx="2" fill="#4A3128"/>
+          <rect x="76" y="115" width="6" height="32" rx="2" fill="#4A3128"/>
+          <g transform="translate(50,74)">
+            <ellipse cx="-17" cy="14" rx="5.5" ry="11" fill="#33303A" transform="rotate(-18 -17 14)"/>
+            <ellipse cx="17" cy="14" rx="5.5" ry="11" fill="#33303A" transform="rotate(18 17 14)"/>
+            <ellipse cx="0" cy="16" rx="17" ry="14" fill="#33303A"/>
+            <ellipse cx="0" cy="19" rx="10" ry="10" fill="#FFFFFF"/>
+            <circle cx="0" cy="-9" r="19" fill="#33303A"/>
+            <ellipse cx="0" cy="-5" rx="13" ry="12" fill="#FFFFFF"/>
+            <circle cx="-9" cy="-2" r="2.6" fill="#FFC1CC" opacity="0.75"/>
+            <circle cx="9" cy="-2" r="2.6" fill="#FFC1CC" opacity="0.75"/>
+            <circle cx="-6.5" cy="-8" r="3.1" fill="#1A1A1A"/>
+            <circle cx="6.5" cy="-8" r="3.1" fill="#1A1A1A"/>
+            <circle cx="-7.4" cy="-9.2" r="1.1" fill="#FFFFFF"/>
+            <circle cx="5.6" cy="-9.2" r="1.1" fill="#FFFFFF"/>
+            <path d="M-3.2 -1 L0 3.5 L3.2 -1 L0 -3.5 Z" fill="#F4A93B"/>
+            <ellipse cx="-9" cy="29" rx="7" ry="4.5" fill="#F4A93B"/>
+            <ellipse cx="9" cy="29" rx="7" ry="4.5" fill="#F4A93B"/>
+            <path d="M-5.5 6 L0 9.5 L5.5 6 L0 3 Z" fill="#E4485F"/>
+          </g>
+        </svg>
+        <span class="label-chip">Press the penguin 🐧</span>
       </button>
 
       <!-- treasure chest -->
@@ -1422,7 +1527,7 @@ const notesData = [
   { title:"Spoil you rotten", body:"It would be my pleasure to spend every last cent, even if it means going broke, just to spend every minute with you. So fucking worth it.", color:"#FFDDB0" },
   { title:"My Fantasy", body:"Hey, I'm only human, so it's natural for me to be physically drawn to you. But it's more than that — your lips, your eyes, that mole in just the right place, your curls, your curves, all of you together. You've completely captivated me.", color:"#CDEAC4" },
   { title:"Tickles in My Brain", body:"The way you think, the way you see life, how you reason things through, and how time just disappears when we talk. It amazes me how much I love your storytelling — how you make me imagine things, make me feel things, make everything come alive. I could listen to you forever.", color:"#FFF1A8" },
-  { title:"Fallin'", body:"I never expected to feel this deeply about you. It's too late for me now — I've already fallen. Maybe I'm selfish, maybe I'm greedy. Even knowing fate might not be on our side, even knowing this could hurt us both eventually, I still choose to feel this way. Because deep down, all I want is for you, Jirah Mae Baylen, to be the one I spend the rest of my life with.", color:"#FFB3B3" }
+  { title:"Fallin'", body:"I never expected to feel this deeply about you. It's too late for me now — I've already fallen. Maybe I'm selfish, maybe I'm greedy. Even knowing fate might not be on our side, even knowing this could hurt us both eventually, I still choose to feel this way. Because deep down, all I want is for you, Jaira Mae Baylen, to be the one I spend the rest of my life with.", color:"#FFB3B3" }
 ];
 const notePositions = [
   { top:6,  left:4,  rot:-6 },
@@ -1747,6 +1852,115 @@ function closeToastBackdrop(e){
   if(e.target.id === 'prize-toast'){
     document.getElementById('prize-toast').classList.remove('show');
   }
+}
+
+/* ================= BEAR LETTER (envelope + letter reveal) ================= */
+const bearLetterText = `Thoughts for my almost 💭
+
+Hi Genie,
+
+I wanna say that, you are my almost. Funny, isn't it? I somehow lost you without ever really having you in the first place. It sounds cliché, I know. But clichés exist because people keep surviving the same kind of heartbreak.
+
+There was something. Just... not something we could ever name. Too close to be nothing. Too familiar to be strangers. But never enough to become something real. We lived in that tiny space between "maybe" and "almost", and I stayed there far longer than I should have because a part of me kept believing that one day we'd finally get our timing right. That maybe we'd meet each other again on a clean slate, without all the things that kept getting in the way.
+
+But the universe has a funny sense of humor isn't? We had different priorities. Different paths. Different choices. None of them ever led to US.
+
+Then again... there was never really an us to begin with.
+
+Sometimes I wonder if things would've been different if I had met you sooner,,, Maybe there would've been a chance. But if I'm being fair, I wasn't the version of myself who could've loved you the way you deserved back then. And maybe you weren't either. Timing wasn't just bad—it simply wasn't ours. 🤷🏻‍♀️
+
+That's probably the hardest part. There was no relationship to grieve. No anniversary to remember. No official goodbye. No single moment I could point at and say, "That's where we ended." Because how do you end something that never truly began?
+
+We were just a story that never made it past the first chapter. Or maybe... not even the first.
+
+Just a rough draft filled with unfinished sentences, where we somehow lost all the words needed to keep writing.
+
+Still, I know I won't forget you.
+
+You'll probably cross my mind on random Tuesdays, during boring commutes, while folding laundry, or in the middle of a song I wasn't even paying attention to. You'll sneak into ordinary moments without permission. I'll remember our random conversations, the stupid little jokes, the comfort that somehow came so naturally. When something ridiculous happens at work, you'll still be the first person I'll want to rant to.
+
+Then reality will tap me on the shoulder and laugh.
+
+"Oo nga pala... hindi naman tayo."
+
+Actually...
+
+Hindi naman talaga tayo naging tayo.
+
+And somehow, that hurts more than I'd like to admit. I keep asking myself questions I'll probably never get answers to.
+
+How do you let go of someone who was never yours?
+How do you stop missing a person you never had the right to miss?
+
+Hmmm, maybe,, maybe what I'm grieving isn't you.
+
+Maybe it's the version of us that only existed in the quiet corners of my mind. The late-night conversations we never got to have. The memories we never made. The inside jokes that never existed. The future I secretly built in my head without realizing I was the only one living in it.
+
+Or maybe...
+
+Maybe I wasn't in love with you.
+Maybe I fell in love with the possibility of you. 🤷🏻‍♀️😖
+With the idea that, somehow, someday, there could've been an us.
+
+That's embarrassing, isn't it?
+
+Kinda rude of my imagination to write a whole love story while reality didn't even agree to the cast. It's strange how you can miss someone this deeply when they were never yours to lose.
+
+How your heart can carry the weight of a goodbye that was never spoken. 🫠
+
+How you can mourn a love that never officially existed. 🤧
+
+But maybe that's the cruel thing about almosts.
+
+Sometimes they leave deeper wounds than actual endings. Because endings, no matter how painful, eventually give you closure.
+
+Almosts don't.
+
+They leave you haunted by the version of life that never happened. 😬
+
+They leave you wondering what would've changed if the timing had been kinder... if one choice had been different... if one of us had been brave enough... if the universe had blinked at the right moment.
+
+But it didn't.
+
+So here we are.
+
+Just two people who were almost something.
+
+And maybe that's exactly why I'll always carry a small part of you... 🙂
+
+Not because you were mine—
+but because, for a little while...
+
+I quietly hoped I'd be yours. 🌷
+
+xoxo,
+your orange girly 🧡`;
+let letterOpened = false;
+
+function openBearLetter(){
+  letterOpened = false;
+  openModal(`
+    <h3>A Letter From Her</h3>
+    <p class="modal-sub">Tap the envelope to open it.</p>
+    <div class="bear-letter-scene">
+      <div class="envelope" id="bear-envelope" onclick="openLetterAnim()">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body"></div>
+        <div class="envelope-hint" id="envelope-hint">tap to open</div>
+      </div>
+      <div class="letter-paper" id="bear-letter-paper">${bearLetterText}</div>
+    </div>
+  `);
+}
+
+function openLetterAnim(){
+  if(letterOpened) return;
+  letterOpened = true;
+  document.getElementById('bear-envelope').classList.add('open');
+  document.getElementById('envelope-hint').style.display = 'none';
+  setTimeout(()=>{
+    document.getElementById('bear-letter-paper').classList.add('show');
+  }, 300);
 }
 </script>
 </body>
