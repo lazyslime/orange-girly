@@ -196,6 +196,39 @@
     transform: rotateY(-100deg);
   }
 
+  .password-gate{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .password-input{
+    font-family:'Nunito', sans-serif;
+    font-size:0.95rem;
+    text-align:center;
+    padding:10px 20px;
+    border-radius:999px;
+    border:2px solid var(--blush);
+    background: var(--cream);
+    color: var(--ink);
+    width:220px;
+    max-width:70vw;
+  }
+  .password-input:focus{ outline:none; border-color:var(--rose); }
+  .password-error{
+    color: var(--crimson);
+    font-size:0.8rem;
+    min-height:1.1em;
+  }
+  @keyframes shakeX{
+    10%,90%{ transform: translateX(-4px); }
+    20%,80%{ transform: translateX(4px); }
+    30%,50%,70%{ transform: translateX(-6px); }
+    40%,60%{ transform: translateX(6px); }
+  }
+  .password-input.shake{ animation: shakeX 0.4s ease; }
+
   .enter-btn{
     background: var(--crimson);
     color:var(--cream);
@@ -927,6 +960,28 @@
     padding:20px 18px;
     transform: translateX(-50%) translateY(-46px);
   }
+  .letter-pager{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    margin-top:8px;
+  }
+  .letter-pager button{
+    width:32px; height:32px;
+    border-radius:50%;
+    background: var(--blush);
+    color: var(--crimson);
+    font-size:0.9rem;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .letter-pager button:disabled{ opacity:0.3; }
+  .letter-page-label{
+    font-size:0.78rem;
+    color: var(--cocoa);
+    min-width:3em;
+    text-align:center;
+  }
 
   @media (max-width:560px){
     .shelf{ justify-content:center; }
@@ -960,7 +1015,11 @@
         <div class="pot"></div>
       </div>
     </div>
-    <button class="enter-btn" onclick="enterCafe()">Come in ☕</button>
+    <div class="password-gate">
+      <input type="text" id="cafe-password" class="password-input" placeholder="what's the password?" onkeydown="if(event.key==='Enter') attemptEnter()">
+      <div class="password-error hidden" id="password-error">that's not it — try again 💭</div>
+    </div>
+    <button class="enter-btn" onclick="attemptEnter()">Come in ☕</button>
   </div>
 
   <!-- CAFE SCENE -->
@@ -1032,8 +1091,8 @@
       <!-- table with legs -->
       <button class="hotspot obj-table" onclick="openTarot()">
         <svg viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg">
-          <rect x="35" y="55" width="4" height="45" rx="2" fill="#8A6A57"/>
-          <rect x="81" y="55" width="4" height="45" rx="2" fill="#8A6A57"/>
+          <rect x="35" y="63" width="4" height="37" rx="2" fill="#8A6A57"/>
+          <rect x="81" y="63" width="4" height="37" rx="2" fill="#8A6A57"/>
           <ellipse cx="60" cy="48" rx="50" ry="17" fill="url(#topGrad)"/>
           <defs>
             <radialGradient id="topGrad" cx="50%" cy="35%" r="75%">
@@ -1041,8 +1100,8 @@
               <stop offset="100%" stop-color="#E9BE9C"/>
             </radialGradient>
           </defs>
-          <rect x="41" y="57" width="6" height="50" rx="2" fill="#6B4A3F"/>
-          <rect x="73" y="57" width="6" height="50" rx="2" fill="#6B4A3F"/>
+          <rect x="41" y="64" width="6" height="43" rx="2" fill="#6B4A3F"/>
+          <rect x="73" y="64" width="6" height="43" rx="2" fill="#6B4A3F"/>
           <g transform="rotate(-10 50 42)">
             <rect x="45" y="34" width="11" height="16" rx="1.5" fill="#FFF7F1" stroke="#E4485F" stroke-width="1"/>
           </g>
@@ -1050,7 +1109,7 @@
             <rect x="59" y="34" width="11" height="16" rx="1.5" fill="#FFF7F1" stroke="#E4485F" stroke-width="1"/>
           </g>
           <rect x="74" y="38" width="9" height="8" rx="1.5" fill="#FFF7F1"/>
-          <path d="M83 40 q4 0 4 3.5 q0 3.5 -4 3.5" fill="none" stroke="#FFF7F1" stroke-width="1.6"/>
+          <path d="M83 39.5 q4 0 4 2.5 q0 2.5 -4 2.5" fill="none" stroke="#FFF7F1" stroke-width="1.6"/>
         </svg>
         <span class="label-chip">Pull a card 🔮</span>
       </button>
@@ -1094,26 +1153,15 @@
           <rect x="15" y="105" width="70" height="12" rx="4" fill="#8A6A57"/>
           <rect x="18" y="115" width="6" height="32" rx="2" fill="#4A3128"/>
           <rect x="76" y="115" width="6" height="32" rx="2" fill="#4A3128"/>
-          <g transform="translate(50,74)">
-            <ellipse cx="-17" cy="14" rx="5.5" ry="11" fill="#33303A" transform="rotate(-18 -17 14)"/>
-            <ellipse cx="17" cy="14" rx="5.5" ry="11" fill="#33303A" transform="rotate(18 17 14)"/>
-            <ellipse cx="0" cy="16" rx="17" ry="14" fill="#33303A"/>
-            <ellipse cx="0" cy="19" rx="10" ry="10" fill="#FFFFFF"/>
-            <circle cx="0" cy="-9" r="19" fill="#33303A"/>
-            <ellipse cx="0" cy="-5" rx="13" ry="12" fill="#FFFFFF"/>
-            <circle cx="-9" cy="-2" r="2.6" fill="#FFC1CC" opacity="0.75"/>
-            <circle cx="9" cy="-2" r="2.6" fill="#FFC1CC" opacity="0.75"/>
-            <circle cx="-6.5" cy="-8" r="3.1" fill="#1A1A1A"/>
-            <circle cx="6.5" cy="-8" r="3.1" fill="#1A1A1A"/>
-            <circle cx="-7.4" cy="-9.2" r="1.1" fill="#FFFFFF"/>
-            <circle cx="5.6" cy="-9.2" r="1.1" fill="#FFFFFF"/>
-            <path d="M-3.2 -1 L0 3.5 L3.2 -1 L0 -3.5 Z" fill="#F4A93B"/>
-            <ellipse cx="-9" cy="29" rx="7" ry="4.5" fill="#F4A93B"/>
-            <ellipse cx="9" cy="29" rx="7" ry="4.5" fill="#F4A93B"/>
-            <path d="M-5.5 6 L0 9.5 L5.5 6 L0 3 Z" fill="#E4485F"/>
-          </g>
+          <svg x="21" y="44" width="58" height="62" viewBox="0 0 355 383" preserveAspectRatio="xMidYMid meet">
+            <path d="M160.9 124.11C160.71 124.46 160.53 124.82 160.34 125.18C159.33 125.69 158.32 126.2 157.31 126.7C156.58 127.48 155.85 128.27 155.12 129.05C153 129.69 149.1 132.92 148.39 135.1C147.91 135.55 147.42 136 146.94 136.45C147.28 137.62 148.41 139.24 149.74 139.14C153.33 142.39 156.91 145.65 160.5 148.9C160.74 148.73 160.98 148.56 161.22 148.39C161.88 148.83 162.54 149.26 163.2 149.69C163.03 149.88 162.86 150.07 162.69 150.27C167.66 152.68 171.47 153.49 176.66 152.73C176.77 152.78 176.88 152.83 177 152.88C179.42 153.78 187.23 149.7 189.62 148.42C190.53 147.93 193.34 146.81 192.81 145.7C193.09 145.81 193.37 145.92 193.65 146.04C194.04 145.76 194.44 145.48 194.83 145.2C194.81 144.92 194.78 144.64 194.76 144.36C194.97 144.52 195.18 144.69 195.39 144.86C197 143.69 199.89 142.35 200.21 140.49C201.67 140.31 202.06 139.44 202.29 138.13C201.95 137.57 201.62 137.01 201.28 136.45C199.49 134.32 197.71 132.19 195.92 130.05C193.29 129.17 190.4 126.32 188.73 124.12C192.52 108.67 193.02 89.83 206.88 79.19C210.43 76.46 214.26 74.86 218.56 73.75C247.46 66.32 262.82 100.99 265.4 123.67C265.94 128.41 265.97 133.39 265.44 138.13C263.72 153.63 257.09 168.04 245.38 178.57C240.2 183.24 233.22 186.41 228.43 191.3C229.42 194.96 234.45 199.08 236.82 202.14C242.1 208.95 246.66 216.3 250.77 223.86C261.94 244.42 268.6 270.45 262.83 293.59C261.56 298.64 259.48 303.97 256.84 308.48C255.64 310.53 253.96 312.46 252.99 314.62C251.41 314.7 249.73 314.4 248.17 314.75C246.63 315.1 245.59 316.42 244.13 316.64C242.44 318.01 240.76 319.38 239.08 320.75C237.51 323.2 235.94 325.64 234.37 328.08C233.67 326.45 232.97 324.83 232.27 323.2C231.34 322.68 230.35 320.91 230.43 319.84C228.46 319.1 227.49 316.53 225.56 315.59C222.2 313.96 216.76 317.41 215.02 320.16C214.12 321.59 213.84 323.35 212.65 324.55C211.85 328.14 211.05 331.73 210.25 335.32C210.33 336.27 210.4 337.22 210.48 338.18C210.36 337.78 210.24 337.39 210.13 337C210.28 337.95 210.44 338.9 210.59 339.86C210.68 340.7 210.77 341.54 210.85 342.38C210.67 343.09 210.49 343.8 210.31 344.51C204.26 345.39 198.42 347.75 192.31 348.65C176.17 351.02 160.79 349.03 145.08 345.59C143.69 341.6 144.69 337.07 144.27 332.79C144.21 332.36 144.14 331.93 144.08 331.5C144.01 329.52 143.95 327.54 143.88 325.56C143.19 326.73 143.14 321.96 142.13 320.39C141.57 319.53 137.07 315.11 137.12 314.77C136.11 314.44 135.1 314.11 134.09 313.79C132.86 314.12 131.63 314.45 130.4 314.79C129.95 315.29 129.5 315.8 129.05 316.3C128.68 316.79 128.32 317.27 127.96 317.76C127.31 318.06 126.67 318.36 126.02 318.66C124.95 320.73 123.89 322.81 122.82 324.88C122.32 325.73 121.81 326.57 121.31 327.41C119.84 326.49 118.35 323.79 117.94 322C117.55 321.73 117.16 321.46 116.76 321.18C112.99 317.03 110.4 311.54 103.47 312.96C102.59 313.31 101.71 313.65 100.83 314C96.31 308.59 93.75 300.97 91.76 294.32C83.75 267.52 93.65 238.14 107.31 214.81C110.33 209.65 113.68 204.69 117.33 199.94C119.14 197.57 122.07 195.31 123.3 192.64C121.58 189.84 116.1 187.6 113.34 185.62C106.97 181.06 101.27 175.39 96.22 169.43C76.65 146.31 78.01 102.07 99.42 80.4C102.46 77.32 106.14 74.69 110.05 72.85C142.14 57.76 161.49 98.07 160.9 124.11ZM128.47 95.03C113.37 98.03 115.88 130.1 133.76 126.86C148.98 124.11 146.53 91.45 128.47 95.03ZM218.61 95.69C202.46 98.05 203.61 128.57 219.9 128C237.17 127.39 235.87 93.17 218.61 95.69ZM119.62 134.09C116.36 130.77 112.31 128.64 107.51 128.62C105.72 128.62 102.44 129.7 101.45 129.47C103.19 129.47 104.93 129.47 106.67 129.47C104.82 129.95 102.97 130.42 101.12 130.9C101 130.56 100.89 130.22 100.78 129.89C97.07 131.63 92.75 135.84 93.38 140.32C93.72 139.87 94.06 139.42 94.4 138.97C94.4 140.32 94.4 141.66 94.4 143.01C94.17 142.56 93.94 142.11 93.71 141.66C94.05 142.84 94.38 144.02 94.72 145.2C95.5 143.5 96.24 145.42 96.07 146.71C95.73 146.37 95.4 146.04 95.06 145.7C96.12 148.75 99.95 151.82 102.97 152.6C102.57 152.09 102.18 151.59 101.79 151.09C103.42 151.76 105.04 152.43 106.67 153.1C106.06 153.18 105.46 153.26 104.85 153.34C107.13 153.35 109.4 153.35 111.68 153.36C110.96 153.28 110.25 153.21 109.53 153.13C110.35 152.29 114.43 151.12 114.24 152.66C116.01 151.67 117.77 150.69 119.54 149.7C119.06 149.7 118.59 149.7 118.11 149.7C118.99 148.49 119.37 148.86 120.3 148.85C121.92 147.05 122.87 144.93 123.1 142.5C122.45 143.74 121.79 144.97 121.14 146.21C121.78 144.92 122.23 142.95 122.15 141.5C122.12 141.06 121.34 139 121.98 138.78C122 138.77 122.59 139.56 122.65 139.64C121.75 137.92 120.86 136.19 119.96 134.46C119.96 134.96 119.96 135.45 119.96 135.94C119.16 135.14 118.41 134.7 119.62 134.09ZM238.07 131.06C237.75 132.3 231.95 133.74 232.01 132.44C219.48 137.81 223.17 154.45 236.05 155.93C235.21 154.27 238.41 154.32 238.07 156.06C239.81 155.75 241.54 155.43 243.28 155.12C242.5 155.12 241.71 155.12 240.93 155.12C242.05 154.73 243.17 154.34 244.29 153.95C244.13 154.35 243.96 154.76 243.79 155.16C248.48 153.78 252.27 149.72 253.01 144.86C252.63 145.03 252.25 145.2 251.86 145.36C252.05 144.36 251.85 142.75 253.07 143.51C252.54 141.86 252.01 140.2 251.48 138.55C251.48 139.03 251.48 139.5 251.48 139.98C250.71 138.86 249.94 137.74 249.17 136.62C249.62 136.84 250.07 137.06 250.52 137.29C249.35 134.88 246.43 133.46 244.13 132.37C244.32 133.87 242.8 133.14 241.6 132.24C242.26 132.24 242.92 132.24 243.58 132.24C241.74 131.85 239.91 131.46 238.07 131.06Z" fill="#ffffff" fill-rule="evenodd" stroke="#ffffff" stroke-width="0.25" stroke-linejoin="round"/>
+            <path d="M260.42 333.34C259.03 334.5 257.63 335.66 256.24 336.82C256.29 335.27 256.35 333.71 256.4 332.16C258.45 328.43 257.28 317.86 253.04 315.65C252.97 315.59 252.9 315.52 252.83 315.46C252.88 315.18 252.94 314.9 252.99 314.62C253.96 312.46 255.64 310.53 256.84 308.48C259.48 303.97 261.56 298.64 262.83 293.59C268.6 270.45 261.94 244.42 250.77 223.86C246.66 216.3 242.1 208.95 236.82 202.14C234.45 199.08 229.42 194.96 228.43 191.3C233.22 186.41 240.2 183.24 245.38 178.57C257.09 168.04 263.72 153.63 265.44 138.13C265.97 133.39 265.94 128.41 265.4 123.67C262.82 100.99 247.46 66.32 218.56 73.75C214.26 74.86 210.43 76.46 206.88 79.19C193.02 89.83 192.52 108.67 188.73 124.12C188.41 124.27 188.09 124.41 187.76 124.56C179.77 119.39 169.85 119.98 161.8 124.54C161.5 124.4 161.2 124.25 160.9 124.11C161.49 98.07 142.14 57.76 110.05 72.85C106.14 74.69 102.46 77.32 99.42 80.4C78.01 102.07 76.65 146.31 96.22 169.43C101.27 175.39 106.97 181.06 113.34 185.62C116.1 187.6 121.58 189.84 123.3 192.64C122.07 195.31 119.14 197.57 117.33 199.94C113.68 204.69 110.33 209.65 107.31 214.81C93.65 238.14 83.75 267.52 91.76 294.32C93.75 300.97 96.31 308.59 100.83 314C100.84 314.32 100.85 314.64 100.86 314.96C99.36 317.09 97.82 319.3 97.89 322.02C97.86 322.25 97.84 322.47 97.81 322.7C97.9 326.7 98 330.71 98.09 334.72C97.05 334.12 96.02 333.52 94.98 332.93C94.45 332.27 93.91 331.61 93.38 330.95C93.22 330.98 93.06 331.02 92.9 331.05C90.35 325.95 85 322.17 82.26 317.03C76.46 306.16 71.9 295.43 70.18 282.91C69.25 276.14 69.64 267.7 71.17 261.09C71.96 257.67 73.66 253.66 73.52 250.2C70.71 250.12 67.46 252.86 64.76 253.72C56.72 256.28 47.44 259.49 38.88 256.74C26.74 252.82 33.22 238.95 36.93 231.6C43.75 218.11 57.2 206.32 69.74 198.11C75.1 194.59 83.47 190.64 87.99 186.59C87.03 184 84.61 181.49 83.02 179.26C81.14 176.62 79.72 173.56 78.15 170.71C73.89 162.98 72.16 153.58 70.2 144.94C68.95 139.45 69.05 133.33 69.05 127.7C69.06 108.97 73.72 95.19 81.26 78.7C83.11 74.66 86.19 71.15 88.45 67.4C90.85 63.42 94.72 60.35 97.74 56.86C103.99 49.62 112.16 42.87 120.56 38.3C128.02 34.24 135.71 30.66 143.87 28.26C148.22 26.98 153.9 27.34 157.9 25.41C156.91 22.07 148.54 18.7 151.25 14.31C156.61 12.72 161.82 19.75 165.78 19.01C165.85 15.68 161.11 11.92 164.38 8.8C169.67 8.88 172.15 15.97 175.48 19.13C177.96 16.24 177.35 4.67 182.55 4.19C186.47 8.74 183.05 15.51 185.24 20.5C188.61 19.45 194.76 11.16 198.7 13.77C200 18.9 195.07 21.27 193.71 25.41C195.94 27.19 203 27.28 206.08 28.27C215.36 31.23 224.96 34.7 233.31 40.09C267.66 62.27 283.53 103.11 278.78 143.35C277.67 152.74 274.35 164 269.99 172.22C268.68 174.69 261.96 184.69 261.87 186.59C265.71 189.62 270.5 191.25 274.46 194.11C288.56 204.3 303.79 214.68 312.06 230.56C315.13 236.45 321.22 249.27 313.58 254.53C307.4 258.79 296.83 257.9 289.9 255.75C288.03 255.17 281.74 252.56 280.13 253.05C279.35 255.75 282.8 268.75 282.89 273.06C283.31 293.27 280.05 308.11 268.16 324.2C265.97 327.16 263.55 331.26 260.42 333.34ZM128.47 95.03C146.53 91.45 148.98 124.11 133.76 126.86C115.88 130.1 113.37 98.03 128.47 95.03ZM218.61 95.69C235.87 93.17 237.17 127.39 219.9 128C203.61 128.57 202.46 98.05 218.61 95.69ZM210.31 344.51C211.54 348.01 212.76 351.5 213.99 355C214.53 356.07 215.07 357.13 215.61 358.2C215.33 358.53 215.06 358.87 214.79 359.21C214.97 359.28 215.16 359.36 215.34 359.43C211.4 361.73 199.9 362.34 194.97 362.92C183.26 364.29 171.38 364.08 159.67 362.67C154 361.98 148.44 360.43 142.81 359.81C142.6 359.44 142.38 359.07 142.17 358.7C143.95 354.47 143.71 350.33 144.41 345.9C144.64 345.79 144.86 345.69 145.08 345.59C160.79 349.03 176.17 351.02 192.31 348.65C198.42 347.75 204.26 345.39 210.31 344.51Z" fill="#010009" fill-rule="evenodd" stroke="#010009" stroke-width="0.25" stroke-linejoin="round"/>
+            <path d="M188.81 126.04C192.95 127.73 198.74 133.56 200.56 137.63C200.28 137.91 199.99 138.19 199.71 138.48C187.82 139.29 176.49 135.02 164.71 135.05C161.99 135.06 150.67 136.49 149.1 135.61C151.24 132.22 157.04 127.33 160.85 126.07C165.68 125.12 169.62 121.71 174.81 121.58C180.16 121.45 183.92 125.04 188.81 126.04ZM127.96 317.76C129.55 317.03 130.83 315.46 132.75 315.22C141.3 314.14 143 326.25 143.63 332.29C143.78 332.02 143.93 331.76 144.08 331.5C144.14 331.93 144.21 332.36 144.27 332.79C144.12 336.82 143.97 340.84 143.82 344.87C142.24 349.37 142.5 354.08 140.82 358.7C140.99 359.09 141.16 359.48 141.33 359.87C140.28 363 135.1 366.01 132.4 366.95C131.33 367.32 129.95 366.95 128.88 367.23C123.22 367.22 117.56 367.21 111.91 367.2C110.44 367.13 108.98 367.06 107.51 366.99C106.56 366.3 105.6 365.62 104.65 364.93C102.26 365.25 101.26 363.73 99.27 363C95.29 361.54 84.35 352.76 82.14 348.71C80.99 346.61 80.53 344.23 78.9 342.38C78.9 341.65 78.9 340.92 78.91 340.19C75.79 338.56 78.72 331.34 81.31 330.07C84.84 328.34 89.44 330.86 92.9 331.05C93.06 331.02 93.22 330.98 93.38 330.95C93.91 331.61 94.45 332.27 94.98 332.93C94.33 332.66 93.69 332.39 93.04 332.12C94.48 333.26 96.67 337.19 99.27 336.32C98.78 331.78 98.3 327.24 97.81 322.7C97.84 322.47 97.86 322.25 97.89 322.02C98.07 322.64 98.25 323.25 98.42 323.86C99.16 320.05 100.39 317.88 102.63 314.9C104.1 313.06 108.14 313.83 109.85 314.97C113.23 317.24 119.25 327.94 121.64 328.16C123.75 324.69 125.86 321.23 127.96 317.76ZM251.79 315.93C252.42 316.89 253.74 317.42 254.44 318.43C256.95 322.06 255.99 327.22 255.63 331.28C255.89 331.05 256.15 330.83 256.41 330.6C256.4 331.12 256.4 331.64 256.4 332.16C256.35 333.71 256.29 335.27 256.24 336.82C257.63 335.66 259.03 334.5 260.42 333.34C260.82 333.5 261.22 333.67 261.62 333.84C264.72 333.4 267.89 329.83 271.38 330.93C274.31 331.85 280.17 338.77 276.09 341.2C276.09 341.93 276.09 342.66 276.09 343.39C274.9 344.71 274.67 346.2 273.85 347.69C272.84 349.55 270.84 350.96 269.82 352.74C269.24 353.74 268.35 353.72 267.46 354.16C265.99 354.9 265.2 356.98 263.78 357.81C261.66 359.03 259.54 360.09 257.37 361.22C255.05 362.43 252.1 364.31 249.34 363.92C248.63 365.18 241.5 366.03 239.75 366.04C230.53 366.09 223.74 366.97 217.32 359.81C216.38 358.05 215.45 356.29 214.51 354.53C214.34 354.69 214.17 354.84 213.99 355C212.76 351.5 211.54 348.01 210.31 344.51C210.49 343.8 210.67 343.09 210.85 342.38C210.77 341.54 210.68 340.7 210.59 339.86C211.92 338.94 211.6 333.55 211.95 331.61C213.61 322.37 221.55 308.5 230.05 321.62C231.35 323.62 232.25 325.91 233.02 328.17C233.47 328.51 233.92 328.84 234.37 329.18C235.85 328.22 236.46 326.16 237.41 324.72C240.49 320.08 245.9 315.2 251.79 315.93Z" fill="#f58042" fill-rule="evenodd" stroke="#f58042" stroke-width="0.25" stroke-linejoin="round"/>
+            <path d="M160.9 124.11C161.2 124.25 161.5 124.4 161.8 124.54C161.37 124.92 160.94 125.3 160.51 125.68C160.62 125.81 160.74 125.94 160.85 126.07C157.04 127.33 151.24 132.22 149.1 135.61C148.75 136.11 148.4 136.62 148.06 137.12C152.44 140.88 156.83 144.64 161.22 148.39C160.98 148.56 160.74 148.73 160.5 148.9C156.91 145.65 153.33 142.39 149.74 139.14C148.41 139.24 147.28 137.62 146.94 136.45C147.42 136 147.91 135.55 148.39 135.1C149.1 132.92 153 129.69 155.12 129.05C155.85 128.27 156.58 127.48 157.31 126.7C158.32 126.2 159.33 125.69 160.34 125.18C160.53 124.82 160.71 124.46 160.9 124.11ZM188.73 124.12C190.4 126.32 193.29 129.17 195.92 130.05C197.71 132.19 199.49 134.32 201.28 136.45C201.62 137.01 201.95 137.57 202.29 138.13C202.06 139.44 201.67 140.31 200.21 140.49C199.89 142.35 197 143.69 195.39 144.86C195.18 144.69 194.97 144.52 194.76 144.36C195.62 143.79 196.49 143.23 197.35 142.67C197.8 142.34 198.25 142 198.7 141.66C199.6 140.43 200.49 139.2 201.39 137.96C201.12 137.85 200.84 137.74 200.56 137.63C198.74 133.56 192.95 127.73 188.81 126.04C188.74 125.75 188.67 125.46 188.6 125.18C188.32 124.97 188.04 124.77 187.76 124.56C188.09 124.41 188.41 124.27 188.73 124.12ZM119.62 134.09C118.41 134.7 119.16 135.14 119.96 135.94C119.96 135.45 119.96 134.96 119.96 134.46C120.86 136.19 121.75 137.92 122.65 139.64C122.59 139.56 122 138.77 121.98 138.78C121.34 139 122.12 141.06 122.15 141.5C122.23 142.95 121.78 144.92 121.14 146.21C121.79 144.97 122.45 143.74 123.1 142.5C122.87 144.93 121.92 147.05 120.3 148.85C119.37 148.86 118.99 148.49 118.11 149.7C118.59 149.7 119.06 149.7 119.54 149.7C117.77 150.69 116.01 151.67 114.24 152.66C114.43 151.12 110.35 152.29 109.53 153.13C110.25 153.21 110.96 153.28 111.68 153.36C109.4 153.35 107.13 153.35 104.85 153.34C105.46 153.26 106.06 153.18 106.67 153.1C105.04 152.43 103.42 151.76 101.79 151.09C102.18 151.59 102.57 152.09 102.97 152.6C99.95 151.82 96.12 148.75 95.06 145.7C95.4 146.04 95.73 146.37 96.07 146.71C96.24 145.42 95.5 143.5 94.72 145.2C94.38 144.02 94.05 142.84 93.71 141.66C93.94 142.11 94.17 142.56 94.4 143.01C94.4 141.66 94.4 140.32 94.4 138.97C94.06 139.42 93.72 139.87 93.38 140.32C92.75 135.84 97.07 131.63 100.78 129.89C100.89 130.22 101 130.56 101.12 130.9C102.97 130.42 104.82 129.95 106.67 129.47C104.93 129.47 103.19 129.47 101.45 129.47C102.44 129.7 105.72 128.62 107.51 128.62C112.31 128.64 116.36 130.77 119.62 134.09ZM238.07 131.06C239.91 131.46 241.74 131.85 243.58 132.24C242.92 132.24 242.26 132.24 241.6 132.24C242.8 133.14 244.32 133.87 244.13 132.37C246.43 133.46 249.35 134.88 250.52 137.29C250.07 137.06 249.62 136.84 249.17 136.62C249.94 137.74 250.71 138.86 251.48 139.98C251.48 139.5 251.48 139.03 251.48 138.55C252.01 140.2 252.54 141.86 253.07 143.51C251.85 142.75 252.05 144.36 251.86 145.36C252.25 145.2 252.63 145.03 253.01 144.86C252.27 149.72 248.48 153.78 243.79 155.16C243.96 154.76 244.13 154.35 244.29 153.95C243.17 154.34 242.05 154.73 240.93 155.12C241.71 155.12 242.5 155.12 243.28 155.12C241.54 155.43 239.81 155.75 238.07 156.06C238.41 154.32 235.21 154.27 236.05 155.93C223.17 154.45 219.48 137.81 232.01 132.44C231.95 133.74 237.75 132.3 238.07 131.06ZM192.81 145.7C193.34 146.81 190.53 147.93 189.62 148.42C187.23 149.7 179.42 153.78 177 152.88C182.27 150.48 187.54 148.09 192.81 145.7ZM163.2 149.69C165.72 149.86 168.59 152 171.44 152.36C172.98 152.56 175.46 151.95 176.66 152.73C171.47 153.49 167.66 152.68 162.69 150.27C162.86 150.07 163.03 149.88 163.2 149.69ZM127.96 317.76C125.86 321.23 123.75 324.69 121.64 328.16C119.25 327.94 113.23 317.24 109.85 314.97C108.14 313.83 104.1 313.06 102.63 314.9C102.41 314.86 102.18 314.83 101.96 314.79C101.68 314.96 101.4 315.13 101.12 315.29C101.03 315.18 100.95 315.07 100.86 314.96C100.85 314.64 100.84 314.32 100.83 314C101.71 313.65 102.59 313.31 103.47 312.96C110.4 311.54 112.99 317.03 116.76 321.18C117.16 321.46 117.55 321.73 117.94 322C118.35 323.79 119.84 326.49 121.31 327.41C121.81 326.57 122.32 325.73 122.82 324.88C123.89 322.81 124.95 320.73 126.02 318.66C126.67 318.36 127.31 318.06 127.96 317.76ZM144.08 331.5C143.93 331.76 143.78 332.02 143.63 332.29C143 326.25 141.3 314.14 132.75 315.22C130.83 315.46 129.55 317.03 127.96 317.76C128.32 317.27 128.68 316.79 129.05 316.3C129.5 315.8 129.95 315.29 130.4 314.79C131.63 314.45 132.86 314.12 134.09 313.79C135.1 314.11 136.11 314.44 137.12 314.77C137.07 315.11 141.57 319.53 142.13 320.39C143.14 321.96 143.19 326.73 143.88 325.56C143.95 327.54 144.01 329.52 144.08 331.5ZM252.99 314.62C252.94 314.9 252.88 315.18 252.83 315.46C252.9 315.52 252.97 315.59 253.04 315.65C252.76 315.53 252.48 315.42 252.2 315.3C252.06 315.51 251.93 315.72 251.79 315.93C245.9 315.2 240.49 320.08 237.41 324.72C236.46 326.16 235.85 328.22 234.37 329.18C233.92 328.84 233.47 328.51 233.02 328.17C232.25 325.91 231.35 323.62 230.05 321.62C221.55 308.5 213.61 322.37 211.95 331.61C211.6 333.55 211.92 338.94 210.59 339.86C210.44 338.9 210.28 337.95 210.13 337C210.24 337.39 210.36 337.78 210.48 338.18C210.4 337.22 210.33 336.27 210.25 335.32C211.05 331.73 211.85 328.14 212.65 324.55C213.84 323.35 214.12 321.59 215.02 320.16C216.76 317.41 222.2 313.96 225.56 315.59C227.49 316.53 228.46 319.1 230.43 319.84C230.35 320.91 231.34 322.68 232.27 323.2C232.97 324.83 233.67 326.45 234.37 328.08C235.94 325.64 237.51 323.2 239.08 320.75C240.76 319.38 242.44 318.01 244.13 316.64C245.59 316.42 246.63 315.1 248.17 314.75C249.73 314.4 251.41 314.7 252.99 314.62ZM144.27 332.79C144.69 337.07 143.69 341.6 145.08 345.59C144.86 345.69 144.64 345.79 144.41 345.9C144.21 345.55 144.01 345.21 143.82 344.87C143.97 340.84 144.12 336.82 144.27 332.79ZM128.88 367.23C128.6 367.56 128.32 367.88 128.04 368.21C122.99 368.21 117.94 368.21 112.89 368.21C112.56 367.87 112.24 367.54 111.91 367.2C117.56 367.21 123.22 367.22 128.88 367.23Z" fill="#efb090" fill-rule="evenodd" stroke="#efb090" stroke-width="0.25" stroke-linejoin="round"/>
+            <path d="M187.76 124.56C188.04 124.77 188.32 124.97 188.6 125.18C188.67 125.46 188.74 125.75 188.81 126.04C183.92 125.04 180.16 121.45 174.81 121.58C169.62 121.71 165.68 125.12 160.85 126.07C160.74 125.94 160.62 125.81 160.51 125.68C160.94 125.3 161.37 124.92 161.8 124.54C169.85 119.98 179.77 119.39 187.76 124.56ZM200.56 137.63C200.84 137.74 201.12 137.85 201.39 137.96C200.49 139.2 199.6 140.43 198.7 141.66C198.25 142 197.8 142.34 197.35 142.67C196.49 143.23 195.62 143.79 194.76 144.36C194.78 144.64 194.81 144.92 194.83 145.2C194.44 145.48 194.04 145.76 193.65 146.04C193.37 145.92 193.09 145.81 192.81 145.7C187.54 148.09 182.27 150.48 177 152.88C176.88 152.83 176.77 152.78 176.66 152.73C175.46 151.95 172.98 152.56 171.44 152.36C168.59 152 165.72 149.86 163.2 149.69C162.54 149.26 161.88 148.83 161.22 148.39C156.83 144.64 152.44 140.88 148.06 137.12C148.4 136.62 148.75 136.11 149.1 135.61C150.67 136.49 161.99 135.06 164.71 135.05C176.49 135.02 187.82 139.29 199.71 138.48C199.99 138.19 200.28 137.91 200.56 137.63ZM102.63 314.9C100.39 317.88 99.16 320.05 98.42 323.86C98.25 323.25 98.07 322.64 97.89 322.02C97.82 319.3 99.36 317.09 100.86 314.96C100.95 315.07 101.03 315.18 101.12 315.29C101.4 315.13 101.68 314.96 101.96 314.79C102.18 314.83 102.41 314.86 102.63 314.9ZM253.04 315.65C257.28 317.86 258.45 328.43 256.4 332.16C256.4 331.64 256.4 331.12 256.41 330.6C256.15 330.83 255.89 331.05 255.63 331.28C255.99 327.22 256.95 322.06 254.44 318.43C253.74 317.42 252.42 316.89 251.79 315.93C251.93 315.72 252.06 315.51 252.2 315.3C252.48 315.42 252.76 315.53 253.04 315.65ZM97.81 322.7C98.3 327.24 98.78 331.78 99.27 336.32C96.67 337.19 94.48 333.26 93.04 332.12C93.69 332.39 94.33 332.66 94.98 332.93C96.02 333.52 97.05 334.12 98.09 334.72C98 330.71 97.9 326.7 97.81 322.7ZM143.82 344.87C144.01 345.21 144.21 345.55 144.41 345.9C143.71 350.33 143.95 354.47 142.17 358.7C142.38 359.07 142.6 359.44 142.81 359.81C142.32 359.83 141.82 359.85 141.33 359.87C141.16 359.48 140.99 359.09 140.82 358.7C142.5 354.08 142.24 349.37 143.82 344.87ZM217.32 359.81C216.83 359.87 216.35 359.94 215.86 360C215.69 359.81 215.51 359.62 215.34 359.43C215.16 359.36 214.97 359.28 214.79 359.21C215.06 358.87 215.33 358.53 215.61 358.2C215.07 357.13 214.53 356.07 213.99 355C214.17 354.84 214.34 354.69 214.51 354.53C215.45 356.29 216.38 358.05 217.32 359.81Z" fill="#d5693f" fill-rule="evenodd" stroke="#d5693f" stroke-width="0.25" stroke-linejoin="round"/>
+          </svg>
         </svg>
-        <span class="label-chip">Hi ♥</span>
+        <span class="label-chip">Press the penguin 🐧</span>
       </button>
 
       <!-- treasure chest -->
@@ -1142,6 +1190,22 @@
 
 <script>
 /* ================= LANDING -> SCENE ================= */
+function attemptEnter(){
+  const input = document.getElementById('cafe-password');
+  const val = input.value.trim().toLowerCase();
+  const err = document.getElementById('password-error');
+
+  if(val === 'genie'){
+    err.classList.add('hidden');
+    enterCafe();
+  } else {
+    input.classList.remove('shake');
+    void input.offsetWidth;
+    input.classList.add('shake');
+    err.classList.remove('hidden');
+  }
+}
+
 function enterCafe(){
   const landing = document.getElementById('landing');
   landing.classList.add('opening');
@@ -1527,7 +1591,7 @@ const notesData = [
   { title:"Spoil you rotten", body:"It would be my pleasure to spend every last cent, even if it means going broke, just to spend every minute with you. So fucking worth it.", color:"#FFDDB0" },
   { title:"My Fantasy", body:"Hey, I'm only human, so it's natural for me to be physically drawn to you. But it's more than that — your lips, your eyes, that mole in just the right place, your curls, your curves, all of you together. You've completely captivated me.", color:"#CDEAC4" },
   { title:"Tickles in My Brain", body:"The way you think, the way you see life, how you reason things through, and how time just disappears when we talk. It amazes me how much I love your storytelling — how you make me imagine things, make me feel things, make everything come alive. I could listen to you forever.", color:"#FFF1A8" },
-  { title:"Fallin'", body:"I never expected to feel this deeply about you. It's too late for me now — I've already fallen. Maybe I'm selfish, maybe I'm greedy. Even knowing fate might not be on our side, even knowing this could hurt us both eventually, I still choose to feel this way. Because deep down, all I want is for you, Jaira Mae Baylen, to be the one I spend the rest of my life with.", color:"#FFB3B3" }
+  { title:"Fallin'", body:"I never expected to feel this deeply about you. It's too late for me now — I've already fallen. Maybe I'm selfish, maybe I'm greedy. Even knowing fate might not be on our side, even knowing this could hurt us both eventually, I still choose to feel this way. Because deep down, all I want is for you, Jirah Mae Baylen, to be the one I spend the rest of my life with.", color:"#FFB3B3" }
 ];
 const notePositions = [
   { top:6,  left:4,  rot:-6 },
@@ -1855,7 +1919,11 @@ function closeToastBackdrop(e){
 }
 
 /* ================= BEAR LETTER (envelope + letter reveal) ================= */
-const bearLetterText = `Thoughts for my almost 💭
+const bearLetters = [
+`
+Date: September 12, 2026
+
+Thoughts for my almost 💭
 
 Hi Genie,
 
@@ -1934,13 +2002,193 @@ but because, for a little while...
 I quietly hoped I'd be yours. 🌷
 
 xoxo,
-your orange girly 🧡`;
+your orange girly 🧡`,
+`Date: September 23, 2026
+If totoo man talaga yung next life, baka doon na lang. And if mas matanda ka pa rin sa’kin, please look for me, okay? Don't make me do all the work in every lifetime. 🙄 
+
+My face might change. I might look completely different, and maybe you won't recognize me right away. But I hope there's still something about me that feels familiar to you. Yung feeling na parang, “Wait, bakit parang kilala kita?” Kahit hindi mo maipaliwanag, sana may part sa'yo na somehow remembers me. 
+
+And if we really do meet again, I hope I still have the same mindset. You know my favorite line: I’ll do whatever I want so I won’t have regrets in life. So if I find you again, I hope I won't hesitate this time. I hope we both choose each other without overthinking, without being scared, and without finding a hundred reasons why we shouldn't.`,
+`Date: September 23, 2026
+
+I hope the feeling is still the same. Or maybe even stronger. Strong enough that we won't have to wonder if we should take the chance. We just will.
+And if that happens, I'll teach you everything. Literally everything. 😜
+
+Lahat ng nababasa ko sa books, lahat ng bagay na gusto kong matutunan, at lahat ng experiences na gusto kong subukan, ipaparanas ko sa'yo. I'll make you try the things I've always been curious about. And lahat ng gusto kong lutuin sa malawak kong kitchen, ikaw ang unang titikim. Wala kang choice, sorry. You signed up for this. ☺️
+
+I'll cook for you, make you try my random recipes, and probably get annoyed when you keep asking kung kailan kakain. But I'll still make you food, obviously. 😌
+
+I guess what I'm trying to say is, if we get another lifetime, I hope we get to do more. More experiences, more memories, more chances to choose each other.
+
+And if I see you again, I hope I won't have to ask if it's really you.
+
+I hope I'll just look at you and think, "Ah, ikaw pala. Ang tagal mo. Tara, may ipapatikim ako sa'yo." ☺️💗`,
+`Date: September 24, 2026
+
+=== HER ===
+U have a lot of what ifs last night, so here's my take,,
+
+maybe our story really is like an "asymptote"...
+
+We keep getting close, crossing paths, finding each other in different ways, but somehow, we never really meet where we're supposed to. We're always there, just never at the same time, never in the right place, never under the right circumstances.
+
+Maybe that's what the universe has been doing all along. Giving us just enough of each other to remember, but never enough to stay.
+
+And maybe we have to accept that not every story is meant to end with two people holding each other and choosing to stay. Not every love story gets its happily ever after. Some stories are beautiful even when they don't last.
+
+Maybe we're meant to be two people who change each other's lives, but don't necessarily get to spend the rest of them together.
+
+And I hate that thought, honestly. Because what if we really did promise each other in another life? What if we really did wish for this, only to keep missing each other every time the universe gives us another chance?
+
+Fuck. That's such a cruel thought, isn't? 🤧
+
+But maybe happiness isn't always about ending up in each other's arms. Maybe sometimes, it's about finding peace even when the person you want doesn't stay.
+
+Maybe we're like an asymptote. Always getting closer, but never quite touching. 🤷🏻‍♀️
+
+And maybe, in this lifetime, that's all we're meant to be.
+
+Two people who keep finding each other, keep feeling something, keep wondering what if... 🤔
+But never quite becoming us.
+
+And honestly? That's a really sad thing to accept. Because if I had it my way, I wouldn't want to keep meeting you in different lifetimes just to lose you in every single one. I'd want one where we finally stop missing our timing and just choose each other.
+
+But maybe that's me still being stubborn. As usual. 🙄💗
+
+=== HIM ===
+Mami, grabe po yung metaphor mo, di ko kaya yang level na yan, but...
+
+It's like being star-crossed lovers. It may not be as tragic as Jack and Rose from Titanic or Romeo and Juliet, where destiny itself opposes their union, but the same torture, struggle, heartbreak, and miserable feeling can eat you alive and make you wish you were dead.
+
+It brings us back to being "almost" -- stuck somewhere between 'tayo' and 'sana'. Even though we both know that fighting for this is in vain, I can't help but still want you. Even though we know we can't stay, I still want this moment with you. And even knowing that it will hurt so badly later, I'll still choose to hold you a little longer.
+
+I agree that not every story has the same ending. I may or may not be able to hold your hands forever -- but God, I love those hands. I may or may not be able to stay, but meeting you again in this lifetime is one of the happiest things that has ever happened to me. Maybe this story was never meant to be beautiful. Maybe some people may even hate us for doing this. But no matter how it ends, no matter how much it hurts, I will always treasure you in my heart -- and I will never, ever, ever forget you, Jai.
+
+I hate it just as much -- imagining that maybe we've been waiting for each other for thousands, perhaps even millions of years, ever since we made that promise. And now, here we are again, slipping away from each other when we're only a few inches apart. Just a few steps to take. Just one decision to make. Yet somehow, we still aren't brave enough to give it.
+
+But what if the universe is doing this to protect us?
+
+What if it is saving us from ourselves -- from hurting each other, from breaking each other, from sparing us from a pain that has been long, long overdue? What if the pain we're still stubbornly struggling through is the very pain we were meant to be spared from, but we keep holding on because we wanted each other so badly, even when we were destined to be apart?
+
+What if the universe could speak to us right now and say, "Please, tumigil na kayo. Stop na. I can't bear seeing you suffer anymore."
+
+What if the universe is just this little, cute creature that has been rooting for us all along, way, way back -- but finally got tired of watching us hurt? Maybe it has been quietly cheering for us through every lifetime, every almost, every tayo and sana, hoping that one day we would finally get it right.
+
+But you know what?
+
+I still want to beg.
+
+I want to beg the universe not to give up on us. I want to beg it to keep rooting for us, just a little longer. To let there be another timeline, another dimension, another lifetime where we finally get the timing right.
+
+Where we are patient. Where we are brave. Where we don't have to be afraid of choosing each other. Where we find each other again -- and this time, we know how to stay.
+
+Maybe in that other universe, we won't have to keep wondering what could have been. Maybe we'll finally understand why we had to lose each other here.
+
+And maybe, just maybe, after thousands or millions of years of searching, we'll find each other again. And this time, we'll look for each other, happily ever after.
+
+=== HER ===
+Nice. Pwede ka nang writer. Amazing. Noice, noice. 👏
+
+Pero ang masasabi ko lang... wala. Ganun talaga. Kahit gaano kaganda yung story na kaya nating isulat, kahit gaano ka-romantic yung idea na we keep finding each other in different lifetimes, at the end of the day, hindi pa rin naman natin pipiliin ang isa't isa.
+
+And I think that's just something we have to accept. Hindi lahat ng magagandang kwento kailangang may happy ending. Minsan, hanggang kwento lang talaga. We can give it all the beautiful words we want, make it sound like something written by the universe itself, pero kung hindi naman tayo magtatagpo sa tamang pagkakataon, then that's that.
+
+Wala na rin naman akong magagawa tungkol doon. I'm not going to keep forcing a meaning into something that simply isn't meant to happen. Maybe we were meant to meet, maybe we weren't. Maybe we were meant to be something in another lifetime, or maybe we're just two people who happened to find each other in this one.
+
+Either way, hindi naman natin kailangang gawing forever ang isang bagay na hindi naman natin kayang piliin hanggang dulo.
+
+So, nice story. Beautiful, even. Pero hanggang doon na lang siguro. The universe can keep its little jokes. I'm tired of trying to figure out the punchline. 🙄
+
+=== HIM ===
+
+Writer ka dyan, sabi ko nga, walang wala ako sa mga bitaw mo -- walang bitaw yung sakin.
+
+Maybe we're just holding on to each other because letting go feels too painful. Maybe this is our way of giving ourselves a little more time before we have to face the reality that we really have to walk away from each other.
+
+Or maybe, somewhere in the back of our minds, we're still hoping that something will happen. That somehow, fate will give us a chance. That something will change, something will fall into place, and we will finally be able to choose each other without having to hurt anyone in the process.
+
+But the truth is, there's an elephant in the room that I can't keep avoiding anymore.
+
+It's me. I am the one standing in the way of this -- I am the elephant, I am the problem.
+
+I love you so daaaaamn much! I know that much. I don't question what I feel for you because, as complicated and wrong as everything has become, my feelings for you are real. I fell so hard for you, Jai. I didn't plan for it, and I never meant for it to happen this way, but it did. And somewhere along the wsy, you became someone I couldn't simply turn my feelings off for.
+
+But loving you doesn't magically make me brave, or even right.
+
+I wish it did. I wish I could just man up, make a decision, leave my current relationship, and choose the life I actually want -- be with you. But I'm scared. I'm scared of hurting her, I'm scared of the consequences. I'm scared of what happens after I finally make a choice that I can't take back.
+
+And the hardest part is knowing that while I'm afraid of hurting her by leaving, I'm already hurting her by staying and doing what I'm doing with you.
+
+I know how unfair that is.
+
+I also know how unfair it is to ask you to stay in this uncertainty with me when I can't promise you anything, the audacity right? I can't promise that I'll be ready sooner or later. I can't even promise that I'll ever be brave enough to give you the life you deserve.
+
+And that kills me because, if I'm being completely honest, a part of me still hopes for a future with you.
+
+I imagine what it would be like to have a fresh start with you. To love you without hiding. To wake up one day and not have to feel guilty about wanting you. To finally choose you openly instead of constantly wondering how much longer we can keep doing this.
+
+But then I look at myself and wonder why you would even like me.
+
+You deserve someone who can choose you without hesitation. Someone who can give you certainty instead of questions. Someone who doesn't make you wait for a decision they should already have the courage to make.
+
+And right now, I am not that person.
+
+I won't make excuses anymore. I won't try to make what I am doing sound less wrong just because what I feel for you is genuine. It doesn't make the situation any less complicated, and it doesn't erase the people who can get hurt because of it, including us.
+
+All I can tell you is the truth.
+
+I love you, Jai.
+
+I love you even though I don't know where this is going. I love you even though I'm scared. I love you even though I may not be able to give you what you deserve right now, maybe not soon, and maybe possibly never.
+
+And I hate that loving you might not be enough to make me brave enough to choose you.
+
+😔🥺`,
+`Date: September 24, 2026 - 4:47PM
+You know what?
+
+I think one of the things I'll remember most is how easily we could turn the most painful things into something beautiful. We could talk about different lifetimes, other timelines, and the possibility of finding each other again, as if the universe had been writing little stories about us long before we even knew each other's names.
+
+And honestly, ang ganda naman ng idea na 'yon. Who wouldn't want to imagine a version of life where everything finally falls into place? Where we get to experience things without constantly looking over our shoulders at what we might lose?
+
+But I think what matters more to me now is what we actually got to experience here.
+
+The conversations, the little moments, the things we shared, and the parts of ourselves we allowed each other to see. Those are things I don't need another lifetime to appreciate.
+
+And I think that's something worth being grateful for, even if it doesn't turn into everything we once imagined.
+
+Pero hindi ibig sabihin nun na kailangan nating manatili sa isang bagay na patuloy lang tayong sinasaktan. Sometimes, letting go isn't about suddenly not caring anymore. It's about realizing that caring for someone doesn't always mean you have to keep holding on.
+
+And I think I'm okay with that now. 🤗
+
+Hindi naman kailangang maging masama yung ending para masabing tapos na. Hindi rin naman kailangang may villain, may kasalanan, or may universe na kontrabida. Sometimes, things just don't work out. And no matter how beautifully we explain it, that's still the truth.
+
+So, thank you for the weird but somwhow semi-happy story. Thank you for making it sound like something worth remembering. Thank you for the moments that made me feel something, for the things I learned, and for the parts of myself I got to share with you.
+
+You became someone I got to know in a way I never expected. And regardless of how complicated things can get, I won't pretend that meeting you meant nothing to me.
+
+Pero kung sakaling may next life man, sana hindi na natin kailangang maghintay ng millions of years para lang malaman kung pipiliin natin ang isa't isa.
+
+And if we don't meet again, that's okay too. 😄
+
+I hope you get to experience a life where you don't have to beg the universe for something to work out. A life where you feel certain, where you feel loved, and where you don't have to keep wondering if you're supposed to stay or let go.
+I hope you get to enjoy the things you love, try the things you're curious about, and make memories without feeling like you have to save them for another version of yourself.
+
+And if you ever find yourself in a kitchen someday, trying one of those recipes you've wanted to make, I hope you remember that somewhere in this lifetime, there was someone who wanted to share all those little experiences with you. Even if I was probably going to criticize your cooking a little. 🙄
+
+Anyway, enough of my existential crisis. Baka sabihin mo pinapaiyak nanaman kita. smile, my genie. We are going to be ok. ☺️
+
+Writing this while listening Sleep tonight by December Avenue.`
+];
+
 let letterOpened = false;
+let currentLetterIndex = 0;
 
 function openBearLetter(){
   letterOpened = false;
+  currentLetterIndex = 0;
   openModal(`
-    <h3>A Letter From Her</h3>
+    <h3>Letters From Her</h3>
     <p class="modal-sub">Tap the envelope to open it.</p>
     <div class="bear-letter-scene">
       <div class="envelope" id="bear-envelope" onclick="openLetterAnim()">
@@ -1948,9 +2196,15 @@ function openBearLetter(){
         <div class="envelope-body"></div>
         <div class="envelope-hint" id="envelope-hint">tap to open</div>
       </div>
-      <div class="letter-paper" id="bear-letter-paper">${bearLetterText}</div>
+      <div class="letter-paper" id="bear-letter-paper"></div>
+    </div>
+    <div class="letter-pager hidden" id="letter-pager">
+      <button id="letter-prev" onclick="changeLetter(-1)">◀</button>
+      <span class="letter-page-label" id="letter-page-label">1 / ${bearLetters.length}</span>
+      <button id="letter-next" onclick="changeLetter(1)">▶</button>
     </div>
   `);
+  document.getElementById('bear-letter-paper').textContent = bearLetters[0];
 }
 
 function openLetterAnim(){
@@ -1960,7 +2214,25 @@ function openLetterAnim(){
   document.getElementById('envelope-hint').style.display = 'none';
   setTimeout(()=>{
     document.getElementById('bear-letter-paper').classList.add('show');
+    document.getElementById('letter-pager').classList.remove('hidden');
+    updateLetterPagerUI();
   }, 300);
+}
+
+function changeLetter(dir){
+  const next = currentLetterIndex + dir;
+  if(next < 0 || next >= bearLetters.length) return;
+  currentLetterIndex = next;
+  const paper = document.getElementById('bear-letter-paper');
+  paper.textContent = bearLetters[currentLetterIndex];
+  paper.scrollTop = 0;
+  updateLetterPagerUI();
+}
+
+function updateLetterPagerUI(){
+  document.getElementById('letter-page-label').textContent = `${currentLetterIndex + 1} / ${bearLetters.length}`;
+  document.getElementById('letter-prev').disabled = currentLetterIndex === 0;
+  document.getElementById('letter-next').disabled = currentLetterIndex === bearLetters.length - 1;
 }
 </script>
 </body>
